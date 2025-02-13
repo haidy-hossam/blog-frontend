@@ -1,5 +1,6 @@
 'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { register, FormData } from '../actions';
@@ -8,6 +9,7 @@ import Button from '../components/Button';
 
 export default function Register() {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
@@ -18,6 +20,7 @@ export default function Register() {
     mutationFn: register,
     onSuccess: () => {
       // Invalidate and refetch
+      router.push('/login');
       queryClient.invalidateQueries({ queryKey: ['register'] });
     },
     onError: (error) => {

@@ -1,15 +1,17 @@
 'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Link from 'next/link';
 
 import { login, FormData } from '../actions';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import Link from 'next/link';
 
 export default function Login() {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({ username: '', password: '' });
 
   const mutation = useMutation({
@@ -18,6 +20,8 @@ export default function Login() {
       const { data, status } = response;
       if (status === 200 && data.token) {
         axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+        localStorage.setItem('token', data.token);
+        router.push('/posts');
       }
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['login'] });

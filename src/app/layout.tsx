@@ -18,6 +18,9 @@ const queryClient = new QueryClient();
 
 axios.defaults.baseURL = 'http://localhost:5000/api/v1';
 
+const token = localStorage.getItem('token');
+if (token) axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
